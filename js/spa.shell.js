@@ -28,12 +28,17 @@ spa.shell = (function(){
           + "<div class='spa-shell-main-content'></div>"
         + "</div>"
         + "<div class='spa-shell-foot'></div>"
-        + "<div class='spa-shell-modal'></div>"
+        + "<div class='spa-shell-modal'></div>",
+      resize_interval: 200,
     },
-    stateMap = {anchor_map: {}},
+    stateMap = {
+      $container: undefined,
+      anchor_map: {},
+      resize_idto: undefined
+    },
     jqueryMap = {},
     copyAnchorMap, setJqueryMap, changeAnchorPart,
-    onHashchange, setChatAnchor, initModule;
+    onHashchange, onResize, setChatAnchor, initModule;
   // ----------- END MODULE SCOPE VARIABLES --------------
   // ----------- BEGIN UTILITY METHODS -------------------
   // Return copy of stored anchor map; minimizes overhead
@@ -245,6 +250,21 @@ spa.shell = (function(){
     return false;
   };
   // End Event handler /onClickChat/
+
+  // Begin Event handler /onResize/
+  onResize = function(){
+    if (stateMap.resize_idto){
+      return true;
+    }
+
+    spa.chat.handleResize();
+    stateMap.resize_idto = setTimeout(function(){
+      stateMap.resize_idto = undefined;
+    }, configMap.resize_interval);
+
+    return true;
+  };
+  // End Event handler /onResize/
   // ----------- END EVENT HANDLERS ----------------------
 
   // ----------- BEGIN CALLBACKS -------------------------
@@ -309,7 +329,8 @@ spa.shell = (function(){
     // the trigger event, which is used to ensure the anchor
     // is considered on-load
     //
-    $(window).bind("hashchange", onHashchange).trigger("hashchange");
+    $(window).bind("resize", onResize)
+      .bind("hashchange", onHashchange).trigger("hashchange");
   };
 
   // End public method /initModule/
