@@ -12,118 +12,38 @@
 /* global $, spa */
 
 spa.data = (function(){
-  /*// ----------- BEGIN MODULE SCOPE VARIABLES -------------
+  "use strict";
+  // ----------- BEGIN MODULE SCOPE VARIABLES -------------
   var
-    config_variables = {
-      var1: {
-        key1 : value1
-      },
-      var2: value2
-    },
-    other_var = {
-      var3: value3,
-      var4: value4,
-    },
-    var5, var6, var7, var8, initModule;
+    stateMap = {sio: null},
+    makeSio, getSio, initModule;
   // ----------- END MODULE SCOPE VARIABLES --------------
 
-  // ----------- BEGIN UTILITY METHODS -------------------
-  // Begin utility method /var5/
-  // Purpose:
-  // Arguments:
-  //  * arg - description
-  // Settings:
-  //  * setting - description
-  // Return: type of returned value (boolean, for example)
-  //  * true - meaning
-  //  * false - meaning
-  // Throws:
-  // Action: describe affect of this method
-  //
-  var5 = function (arg) {
-    // code goes here
-  };
-  // End utility method /var5/
-  // ----------- END UTILITY METHODS ---------------------
+  makeSio = function(){
+    var socket = io.connect("/chat");
 
-  // ----------- BEGIN DOM METHODS -----------------------  
-  // Begin DOM method /var6/
-  // Purpose:
-  // Arguments:
-  //  * arg - description
-  // Settings:
-  //  * setting - description
-  // Return: type of returned value (boolean, for example)
-  //  * true - meaning
-  //  * false - meaning
-  // Throws:
-  // Action: describe affect of this method
-  //
-  var6 = function(arg){
-    // code goes here
-    return value;
+    return {
+      emit: function(event_name, data){
+        socket.emit(event_name, data);
+      },
+      on: function(event_name, callback){
+        socket.on(event_name, function(){
+          callback(arguments);
+        });
+      }
+    };
   };
-  // End DOM method /var6/
-  // ----------- END DOM METHODS -------------------------
 
-  // ----------- BEGIN EVENT HANDLERS --------------------
-  // Begin Event handler /var7/
-  // Purpose:
-  // Arguments:
-  //  * arg - description
-  // Settings:
-  //  * setting - description
-  // Return: type of returned value (boolean, for example)
-  //  * true - meaning
-  //  * false - meaning
-  // Throws:
-  // Action: describe affect of this method
-  //
-  var7 = function(arg){
-    // code goes here
-    return value;
-  }; 
-  // End Event handler /var7/
-  // ----------- END EVENT HANDLERS ----------------------
-
-  // ----------- BEGIN PUBLIC METHODS --------------------
-  // Begin public method /var8/
-  // Purpose:
-  // Arguments:
-  //  * arg - description
-  // Settings:
-  //  * setting - description
-  // Return: type of returned value (boolean, for example)
-  //  * true - meaning
-  //  * false - meaning
-  // Throws:
-  // Action: describe affect of this method
-  //
-  var8 = function(arg){
-    // code goes here
+  getSio = function(){
+    if (!stateMap.sio){
+      stateMap.sio = makeSio();
+    }
+    return stateMap.sio;
   };
-  // End public method /var8/
 
-  // Begin public method /initModule/
-  // Purpose:
-  // Arguments:
-  //  * arg - description
-  // Settings:
-  //  * setting - description
-  // Return: type of returned value (boolean, for example)
-  //  * true - meaning
-  //  * false - meaning
-  // Throws:
-  // Action: describe affect of this method
-  //
-  initModule = function(arg){
-    // code goes here
+  initModule = function(){
   };
-  // End public method /initModule/
   
   // return public methods
-  return {var8: var8, initModule: initModule};
-  // ----------- END PUBLIC METHODS ----------------------
-  */
-  return {};
+  return {getSio: getSio, initModule: initModule};
 }());
